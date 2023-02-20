@@ -519,48 +519,57 @@ and desig_type = 'Not Applicable';
 
 -- TODO: tidy up with function
 
+-- has_forbidden_characters function
+-- '[<>\?\*\r\n]'
+create or replace function has_forbidden_characters(text)
+returns boolean
+as $$
+  select $1 ~ '[<>\?\*\r\n]';
+$$ language sql;
+
 -- forbidden_character_name
 -- NAME contains forbidden characters
 -- Jan 985, Feb 985
 select wdpaid, wdpa_pid, name
 from wdpa_wdoecm_poly_feb023
-where name ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(name);
 
 -- forbidden_character_orig_name
 -- Jan 998, Feb 998
 select wdpaid, wdpa_pid, orig_name
 from wdpa_wdoecm_poly_feb023
-where orig_name ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(orig_name);
+
 
 -- forbidden_character_desig
 -- Jan 0, Feb 0
 select wdpaid, wdpa_pid, desig
 from wdpa_wdoecm_poly_feb023
-where desig ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(desig);
 
 -- forbidden_character_desig_eng
 -- Jan 0, Feb 0
 select wdpaid, wdpa_pid, desig_eng
 from wdpa_wdoecm_poly_feb023
-where desig_eng ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(desig_eng);
 
 -- forbidden_character_mang_auth
 -- Jan 4146, Feb 4147
 select wdpaid, wdpa_pid, mang_auth
 from wdpa_wdoecm_poly_feb023
-where mang_auth ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(mang_auth);
 
 -- forbidden_character_mang_plan
 -- Jan 1701, Feb 1749
 select wdpaid, wdpa_pid, mang_plan
 from wdpa_wdoecm_poly_feb023
-where mang_plan ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(mang_plan);
 
 -- forbidden_character_sub_loc
--- Jan 1701, Feb 1749
+-- Jan 0, Feb 0
 select wdpaid, wdpa_pid, sub_loc
 from wdpa_wdoecm_poly_feb023
-where sub_loc ~ '[<>\?\*\r\n]';
+where has_forbidden_characters(sub_loc);
 
 -- area_invalid_gis_area
 -- check for invalid GIS_AREA <= 0.0001 km² (100 m²)
